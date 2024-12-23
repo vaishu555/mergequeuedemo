@@ -1,22 +1,30 @@
-name: Merge Queue
-on:
-  pull_request:
-    types: [labeled, unlabeled, synchronize]
+ pull_request_rules:
+  # Rule for High Priority PRs
+  - name: Process High Priority Pull Requests
+    conditions:
+      - "label=high-priority"
+      - "base=main"  # Apply this rule only for the main branch
+    actions:
+      queue:
+        name: default
+        priority: high
 
-jobs:
-  prioritize:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+  # Rule for Medium Priority PRs
+  - name: Process Medium Priority Pull Requests
+    conditions:
+      - "label=medium-priority"
+      - "base=main"
+    actions:
+      queue:
+        name: default
+        priority: medium
 
-      - name: Set priority
-        run: |
-          if [[ "${{ github.event.label.name }}" == "high-priority" ]]; then
-            echo "PR is high-priority"
-            # Trigger merge action or re-order queue
-          elif [[ "${{ github.event.label.name }}" == "medium-priority" ]]; then
-            echo "PR is medium-priority"
-          else
-            echo "PR is low-priority"
-          fi
+  # Rule for Low Priority PRs
+  - name: Process Low Priority Pull Requests
+    conditions:
+      - "label=low-priority"
+      - "base=main"
+    actions:
+      queue:
+        name: default
+        priority: low
