@@ -1,1 +1,16 @@
 queue_rules: []
+priority_rules:
+  - name: high priority
+    priority: high
+    conditions: &a1
+      - and:
+          - base = main
+    allow_checks_interruption: false
+  - name: medium priority
+    priority: medium
+    conditions: *a1
+    allow_checks_interruption: false
+  - name: low priority
+    priority: low
+    conditions: *a1
+    allow_checks_interruption: false
