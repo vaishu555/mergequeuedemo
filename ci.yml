@@ -1,13 +1,19 @@
- pull_request_rules:
+ # Define the merge queue
+merge_queue:
+  type: automated
+  merge_method: merge  # or 'rebase', 'squash' depending on preference
+
+# Define rules for managing pull requests
+pull_request_rules:
   # Rule for High Priority PRs
   - name: Process High Priority Pull Requests
     conditions:
       - "label=high-priority"
-      - "base=main"  # Apply this rule only for the main branch
+      - "base=main"  # Only apply this rule for PRs targeting the 'main' branch
     actions:
       queue:
-        name: default
-        priority: high
+        name: default  # This refers to the merge queue we defined earlier
+        priority: high  # High-priority PRs will go to the queue with higher priority
 
   # Rule for Medium Priority PRs
   - name: Process Medium Priority Pull Requests
